@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.massizhi.journalsystem.dao.SjournalToUserDao">
+    <insert id="insertLink" useGeneratedKeys="true" keyProperty="linkId"
+            keyColumn="link_id" parameterType="com.massizhi.journalsystem.entity.SjournalToUser">
+        INSERT INTO sjournal_to_user(user_id, submit_id, relationship)
+        VALUES (#{userId}, #{submitId}, #{relationship})
+    </insert>
+
+    <delete id="deleteReview">
+        DELETE
+        FROM sjournal_to_user
+        WHERE user_id = #{userId}
+          AND submit_id = #{submitId}
+    </delete>
+
+    <delete id="deleteSJ">
+        DELETE
+        FROM sjournal_to_user
+        WHERE submit_id = #{submitId}
+    </delete>
+
+    <select id="queryLink" resultType="com.massizhi.journalsystem.entity.SjournalToUser">
+        SELECT *
+        FROM sjournal_to_user
+    </select>
+
+    <select id="getContributor" resultType="com.massizhi.journalsystem.entity.SjournalToUser">
+        SELECT *
+        FROM sjournal_to_user
+        WHERE submit_id = #{submitId}
+          AND relationship = 0
+    </select>
+
+    <select id="getReviewer" resultType="com.massizhi.journalsystem.entity.SjournalToUser">
+        SELECT *
+        FROM sjournal_to_user
+        WHERE submit_id = #{submitId}
+          AND relationship > 0
+    </select>
+
+    <select id="getContributedJournal" resultType="com.massizhi.journalsystem.entity.SjournalToUser">
+        SELECT *
+        FROM sjournal_to_user
+        WHERE user_id = #{userId}
+          AND relationship = 0
+    </select>
+
+    <select id="getReviewedJournal" resultType="com.massizhi.journalsystem.entity.SjournalToUser">
+        SELECT *
+        FROM sjournal_to_user
+        WHERE user_id = #{userId}
+          AND relationship > 0
+    </select>
+</mapper>

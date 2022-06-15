@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.massizhi.journalsystem.dao.SubmitJournalDao">
+    <insert id="insertSubmitJournal" useGeneratedKeys="true" keyProperty="submitId"
+            keyColumn="submit_id" parameterType="com.massizhi.journalsystem.entity.SubmitJournal">
+        INSERT INTO submit_journal(journal_id, name, state, journal_abstract, key_word, file_name, file_path, authors,
+                                   corresponding_author, corresponding_email)
+        VALUES (#{journalId}, #{name}, #{state}, #{journalAbstract}, #{keyWord}, #{fileName}, #{filePath}, #{authors},
+                #{correspondingAuthor}, #{correspondingEmail})
+    </insert>
+
+    <delete id="deleteSubmitJournal">
+        DELETE
+        FROM submit_journal
+        WHERE submit_id = #{submitId}
+    </delete>
+
+    <update id="updateInfo" parameterType="com.massizhi.journalsystem.entity.SubmitJournal">
+        UPDATE submit_journal
+        <set>
+            <if test="name != null and name != ''">name=#{name},</if>
+            <if test="state != null and state != ''">state=#{state},</if>
+            <if test="journalAbstract != null and journalAbstract != ''">journal_abstract=#{journalAbstract},</if>
+            <if test="keyWord != null and keyWord != ''">key_word=#{keyWord},</if>
+            <if test="fileName != null and fileName != ''">file_name=#{fileName},</if>
+            <if test="filePath != null and filePath != ''">file_path=#{filePath},</if>
+            <if test="authors != null and authors != ''">authors=#{authors},</if>
+            <if test="correspondingAuthor != null and correspondingAuthor != ''">
+                corresponding_author=#{correspondingAuthor},
+            </if>
+            <if test="correspondingEmail != null and correspondingEmail != ''">
+                corresponding_email=#{correspondingEmail},
+            </if>
+        </set>
+        WHERE
+        submit_id = #{submitId}
+    </update>
+
+    <select id="querySubmitJournal" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+    </select>
+
+    <select id="querySubmitJournalByState" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+        WHERE state = #{state}
+    </select>
+
+    <select id="getSubmitJournalByStateAndKey" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+        WHERE state = #{state}
+          and (name like '%${key}%' or key_word like '%${key}%' or authors like '%${key}%')
+    </select>
+
+    <select id="getSubmitJournalById" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+        WHERE submit_id = #{submitId}
+    </select>
+
+    <select id="getIdByName" resultType="java.lang.Integer">
+        SELECT submit_id
+        FROM submit_journal
+        WHERE name = #{name}
+    </select>
+
+    <select id="getSubmitJournalByJournalId" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+        WHERE journal_id = #{journalId}
+    </select>
+
+    <select id="getSubmitJournalByJournalIdAndState" resultType="com.massizhi.journalsystem.entity.SubmitJournal">
+        SELECT *
+        FROM submit_journal
+        WHERE journal_id = #{journalId}
+          AND state = #{state}
+    </select>
+</mapper>

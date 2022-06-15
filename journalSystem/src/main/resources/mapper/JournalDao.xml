@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.massizhi.journalsystem.dao.JournalDao">
+    <insert id="insertJournal" useGeneratedKeys="true" keyProperty="journalId"
+            keyColumn="journal_id" parameterType="com.massizhi.journalsystem.entity.Journal">
+        INSERT INTO journal(name, introduction, page_fee, publish_number, receive_number, start_date, publish_date,
+                            submit_start_date, submit_end_date, distribute_start_date, distribute_end_date,
+                            review_start_date, review_end_date)
+        VALUES (#{name}, #{introduction}, #{pageFee}, #{publishNumber}, #{receiveNumber}, #{startDate}, #{publishDate},
+                #{submitStartDate}, #{submitEndDate}, #{distributeStartDate}, #{distributeEndDate}, #{reviewStartDate},
+                #{reviewEndDate})
+    </insert>
+
+    <update id="updateInfo" parameterType="com.massizhi.journalsystem.entity.Journal">
+        UPDATE journal
+        <set>
+            <if test="name != null and name != ''">name=#{name},</if>
+            <if test="introduction != null">introduction=#{introduction},</if>
+            <if test="pageFee != null">page_fee=#{pageFee},</if>
+            <if test="publishNumber != null">publish_number=#{publishNumber},</if>
+            <if test="receiveNumber != null">receive_number=#{receiveNumber},</if>
+            <if test="startDate != null">start_date=#{startDate},</if>
+            <if test="publishDate != null">publish_date=#{publishDate},</if>
+            <if test="submitStartDate != null">submit_start_date=#{submitStartDate},</if>
+            <if test="submitEndDate != null">submit_end_date=#{submitEndDate},</if>
+            <if test="distributeStartDate != null">distribute_start_date=#{distributeStartDate},</if>
+            <if test="distributeEndDate != null">distribute_end_date=#{distributeEndDate},</if>
+            <if test="reviewStartDate != null">review_start_date=#{reviewStartDate},</if>
+            <if test="reviewEndDate != null">review_end_date=#{reviewEndDate},</if>
+        </set>
+        WHERE
+        journal_id = #{journalId}
+    </update>
+
+    <select id="queryJournal" resultType="com.massizhi.journalsystem.entity.Journal">
+        SELECT *
+        FROM journal
+    </select>
+
+    <select id="getJournalById" resultType="com.massizhi.journalsystem.entity.Journal">
+        SELECT *
+        FROM journal
+        WHERE journal_id = #{journalId}
+    </select>
+
+    <select id="getJournalByName" resultType="com.massizhi.journalsystem.entity.Journal">
+        SELECT *
+        FROM journal
+        WHERE name like '%${name}%'
+    </select>
+
+    <select id="getJournalInSubmitDate" resultType="com.massizhi.journalsystem.entity.Journal">
+        SELECT *
+        FROM journal
+        WHERE submit_start_date &lt;= #{localDate}
+          AND submit_end_date >= #{localDate}
+    </select>
+
+    <select id="getJournalInDate" resultType="com.massizhi.journalsystem.entity.Journal">
+        SELECT *
+        FROM journal
+        WHERE start_date &lt;= #{localDate}
+          AND publish_date >= #{localDate}
+    </select>
+</mapper>

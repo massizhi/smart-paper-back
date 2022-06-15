@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.massizhi.journalsystem.dao.UserDao">
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
+            keyColumn="user_id" parameterType="com.massizhi.journalsystem.entity.User">
+        INSERT INTO user(first_name, last_name, password, avatar_uri, email, identity, organization, location,
+                         introduction)
+        VALUES (#{firstName}, #{lastName}, md5(#{password}), #{avatarUri}, #{email}, #{identity}, #{organization},
+                #{location}, #{introduction})
+    </insert>
+
+    <delete id="deleteUser">
+        DELETE
+        FROM user
+        WHERE user_id = #{userId}
+    </delete>
+
+    <update id="toCR">
+        UPDATE user
+        <set>identity=3</set>
+        WHERE
+        user_id = #{userId}
+    </update>
+
+    <update id="updateInfo" parameterType="com.massizhi.journalsystem.entity.User">
+        UPDATE user
+        <set>
+            <if test="firstName != null and firstName != ''">first_name=#{firstName},</if>
+            <if test="lastName != null and lastName != ''">last_name=#{lastName},</if>
+            <if test="password != null and password != ''">password=md5(#{password}),</if>
+            <if test="avatarUri != null">avatar_uri=#{avatarUri},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+            <if test="organization != null and organization != ''">organization=#{organization},</if>
+            <if test="location != null and location != ''">location=#{location},</if>
+            <if test="identity != null">identity=#{identity},</if>
+            <if test="introduction != null">introduction=#{introduction},</if>
+        </set>
+        WHERE
+        user_id = #{userId}
+    </update>
+
+    <select id="queryUser" resultType="com.massizhi.journalsystem.entity.User">
+        SELECT *
+        FROM user
+    </select>
+
+    <select id="getUserByEmailAndPwd" resultType="com.massizhi.journalsystem.entity.User">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+          AND password = md5(#{password})
+    </select>
+
+    <select id="getUserById" resultType="com.massizhi.journalsystem.entity.User">
+        SELECT *
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getUserByEmail" resultType="com.massizhi.journalsystem.entity.User">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+</mapper>
